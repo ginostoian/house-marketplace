@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import Spinner from "../components/Spinner"
 
 function CreateListing() {
+    const [loading, setLoading] = useState(false)
     const [geolocationEnabled, setGeolocationEnabled] = useState(true)
     const [formData, setFormData] = useState({
         type: 'rent',
@@ -32,6 +33,8 @@ function CreateListing() {
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     setFormData({ ...formData, userRef: user.uid })
+                } else {
+                    navigate('/sign-in')
                 }
             })
         }
@@ -40,6 +43,10 @@ function CreateListing() {
             isMounted.current = false
         }
     }, [isMounted])
+
+    if (loading) {
+        return <Spinner />
+    }
 
     return (
         <div>
