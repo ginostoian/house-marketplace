@@ -66,7 +66,7 @@ function Offers() {
                             ))}
                         </ul>
                     </main>
-                </> : <p>No listings for {params.categoryName}</p>}
+                </> : <p>There are no offers right now. Check back later!</p>}
         </div>
     )
 }
