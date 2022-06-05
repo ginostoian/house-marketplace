@@ -73,6 +73,12 @@ function CreateListing() {
             toast.error('Discounted price should be less than the regular price')
             return
         }
+
+        if (images.length > 6) {
+            setLoading(false)
+            toast.error('Please add no more than 6 images')
+            return
+        }
     }
 
     const onMutate = e => {
