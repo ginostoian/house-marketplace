@@ -41,10 +41,45 @@ function Slider() {
         fetchListings()
     }, [])
 
-    return (
-        <div>
-            Slider
-        </div>
+    if (loading) {
+        return <Spinner />
+    }
+
+    return listings && (
+        <>
+            <p className="exploreHeading">Latest Listings</p>
+
+            <Swiper
+                modules={[Navigation, Pagination, Scrollbar, A11y]}
+                slidesPerView={1}
+                pagination={{ clickable: true }}
+                navigation
+                style={{ height: '300px' }}
+            >
+                {listings.map(({ data, id }) => {
+                    return (
+                        <SwiperSlide key={id} onClick={() => navigate(`/category/${data.type}/${id}`)}>
+                            <div
+                                className='swiperSlideDiv'
+                                style={{
+                                    background: `url(${data.imgUrls[0]}) center no-repeat`,
+                                    backgroundSize: 'cover',
+                                }}
+                            >
+                                <p className="swiperSlideText">{data.name}</p>
+                                <p className="swiperSlidePrice">£{
+                                    data.discountePrice ?
+                                        data.discountePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                        : data.regularPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                }
+                                    {data.type === 'rent' && ' / month'}
+                                </p>
+                            </div>
+                        </SwiperSlide>
+                    )
+                })}
+            </Swiper>
+        </>
     )
 }
 
