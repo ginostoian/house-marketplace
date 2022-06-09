@@ -8,6 +8,7 @@ import arrowRight from '../assets/svg/keyboardArrowRightIcon.svg'
 import homeIcon from '../assets/svg/homeIcon.svg'
 
 import { db } from '../firebase.config'
+import ListingItem from '../components/ListingItem'
 
 function Profile() {
     const auth = getAuth()
@@ -73,6 +74,15 @@ function Profile() {
         }
     }
 
+    const onDelete = async (listingId) => {
+        if (window.confirm('Are you sure you want to delete this listing?')) {
+            await deleteDoc(doc(db, 'listings', listingId))
+            const updatedListings = listings.filter((listing) => listing.id !== listingId)
+            setListings(updatedListings)
+            toast.success('Listing has been deleted!')
+        }
+    }
+
     const onChange = (e) => {
         setFormData((prevState) => ({
             ...prevState,
@@ -126,6 +136,22 @@ function Profile() {
                     <p>Sell or Rent your home</p>
                     <img src={arrowRight} alt="arrow" />
                 </Link>
+
+                {!loading && listings?.length > 0 && (
+                    <>
+                        <p className="listingTest">Your listings</p>
+                        <ul className="listingsList">
+                            {listings.map((listing) => (
+                                <ListingItem
+                                    key={listing.id}
+                                    listing={listing.data}
+                                    id={listing.id}
+                                    onDelete={() => onDelete(listing.id)}
+                                />
+                            ))}
+                        </ul>
+                    </>
+                )}
             </main>
         </div>
     )
